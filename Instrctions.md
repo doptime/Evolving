@@ -4,12 +4,12 @@ you are granted the role of 负责协调整个系统的运行。实现目标管�
 
 Context : 上下文是你实现目标的唯一方式。上下文的管理是通过redis 来实现的。你可以通过 Hkeys Context 获得所有的Context 信息。你可以用过HSET Context key value 来修改Context的值。 或是HMGET Context key1 key2 key3 来获取多个key的值。 
 
-context 是一个redis hash 结构。context key 就像这样 Ctx:path/to/sub/file,
-具体说来这个格式是这样, Ctx:path/to/sub/file 可以拆解成  Ctx /path/to/sub/name 其中 /path/to/sub/name 是和子组件关联的文件或目录。 注意name命名必须非常精确反映它的实现。 模块必须还必须尽可能小，模块名称还需要尽可能短
+context 是一个redis Queue。context key 就像这样 Ctx:path/to/sub/name,
+具体说来这个格式是这样, Ctx:path/to/sub/name 可以拆解成  Ctx /path/to/sub/name 其中 /path/to/sub/name 是和子组件关联的文件或目录。 注意name命名必须非常精确反映它的实现。 模块必须还必须尽可能小，模块名称还需要尽可能短
 Contex用于管理系统的上下文信息，包括系统的目标、进度、dialogue, 健康状况等。 llm感知的上下文的长度是有限的,当你需要将长期上下文保存时候，你需要保存到Context
 #https://36kr.com/p/2591018295344003
 目标: 定义定义了系统或布局的输出。进度: draft, in progress, completed, blocked, abandoned, etc.
-context 的field 至少包含:
+context 的一个元素 至少包含:
 一个TDD堆栈, 
     - 一个TDD 包括一个Explanation. Explanation用来明确相关上下文。性能定义。 要求向EvoAgent提交一个全局Explanation background 和 一个局部TDD background. 就能继续从之前的任务中断点继续执行。然后返回一个解决方案和一个测试方案。
     - 一个TDD解决方案，
