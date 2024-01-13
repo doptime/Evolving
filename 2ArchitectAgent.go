@@ -17,7 +17,7 @@ type TechRequirementList struct {
 }
 
 func KeyMMUEvoTechRequirements(projectName string) *data.Ctx[string, []*TechRequirementItem] {
-	return data.New[string, []*TechRequirementItem]("EvoMMU").Concat(projectName)
+	return data.New[string, []*TechRequirementItem]("MMUEvo").Concat(projectName)
 }
 func SaveFinalTechRequirement(projectName, js string) (err error) {
 	var (

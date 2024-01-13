@@ -14,7 +14,7 @@ type DevelopmentTask struct {
 }
 
 func KeyMMUEvoDevelopmentTasks(projectName string) *data.Ctx[string, []*DevelopmentTask] {
-	return data.New[string, []*DevelopmentTask]("EvoMMU").Concat(projectName)
+	return data.New[string, []*DevelopmentTask]("MMUEvo").Concat(projectName)
 }
 
 func SaveFinalDevelopmentTasks(projectName, js string) (err error) {

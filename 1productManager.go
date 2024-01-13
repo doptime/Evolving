@@ -16,9 +16,8 @@ type MyQuestion struct {
 }
 
 func KeyMMUEvoSpecifications(projectName string) *data.Ctx[string, *SpecificationItem] {
-	return data.New[string, *SpecificationItem]("EvoMMU").Concat(projectName)
+	return data.New[string, *SpecificationItem]("MMUEvo").Concat(projectName)
 }
-
 func Step1ProcessSpecification(projectName, js string) (err error) {
 	type SpecificationVersion struct {
 		Version           int    `json:"version"`

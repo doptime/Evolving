@@ -11,7 +11,7 @@
             "mode": "auto",
             "program": "${fileDirname}",
             "env": {
-                "Redis": "{\"Username\":\"\",\"Password\":\"X0sMBgc3Ac\",\"Host\":\"keydb.lan\",\"Port\":\"6383\",\"DB\":0,\"Name\":\"\"}",
+                "Redis": "{\"Username\":\"\",\"Password\":\"deaf@0829\",\"Host\":\"keydb.lan\",\"Port\":\"6379\",\"DB\":9,\"Name\":\"Auth\"},{\"Username\":\"\",\"Password\":\"X0sMBgc3Ac\",\"Host\":\"keydb.lan\",\"Port\":\"6383\",\"DB\":0,\"Name\":\"\"}",
                 "Http": "{\"CORES\":\"*\",\"Port\":8082,\"Path\":\"/\",\"Enable\":true,\"MaxBufferSize\":10485760}",
                 "LogLevel": "1",
                 "ENV": "dev",

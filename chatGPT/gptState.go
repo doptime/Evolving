@@ -1,4 +1,4 @@
-package gpt
+package chatGPT
 
 import (
 	"fmt"
@@ -56,7 +56,7 @@ type AuthToken struct {
 	RefreshAt          int64
 }
 
-var keyAuthTokens = data.NewStruct[string, *AuthToken]()
+var keyAuthTokens = data.NewStruct[string, *AuthToken]().WithRedis("Auth")
 
 func NewAuthToken(AccountInfo, RefreshToekn string) (authToken *AuthToken) {
 	authToken = &AuthToken{AccountInfo: AccountInfo, RefreshToekn: RefreshToekn}
@@ -184,7 +184,7 @@ func QuotaCheckOK(Model string) (AccessToken string) {
 	}
 	return ""
 }
-func ReportError(ApiName, AccessToekn string, Model string, err error) {
+func ReportError(AccessToekn string, Model string, err error) {
 	if len(AccessToekn) == 0 {
 		return
 	}

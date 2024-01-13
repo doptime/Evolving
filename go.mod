@@ -3,30 +3,28 @@ module Evolving
 go 1.21.5
 
 require (
-	github.com/cespare/xxhash/v2 v2.2.0
+	github.com/cespare/xxhash v1.1.0
 	github.com/danil/randuuid v0.2.0
 	github.com/elliotchance/pie/v2 v2.8.0
 	github.com/json-iterator/go v1.1.12
 	github.com/rs/zerolog v1.31.0
 	github.com/samber/lo v1.39.0
 	github.com/tidwall/gjson v1.17.0
-	github.com/yangkequn/go-openai v0.0.0-20231021135835-7f761e8f96a4
-	github.com/yangkequn/saavuu v0.0.0-20240108025059-fd7adb5710c4
+	github.com/yangkequn/saavuu v0.0.0-20240110134943-4215f38255a8
 )
 
 require (
 	github.com/bits-and-blooms/bitset v1.10.0 // indirect
 	github.com/bits-and-blooms/bloom/v3 v3.6.0 // indirect
+	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/go-ping/ping v1.1.0 // indirect
 	github.com/google/uuid v1.2.0 // indirect
-	github.com/gorilla/schema v1.2.0 // indirect
 	github.com/jinzhu/copier v0.3.5 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
-	github.com/orcaman/concurrent-map/v2 v2.0.1 // indirect
 	github.com/redis/go-redis/v9 v9.0.2 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
