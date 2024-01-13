@@ -1,4 +1,4 @@
-package chatGPT
+package apiChatGPT
 
 import (
 	"fmt"

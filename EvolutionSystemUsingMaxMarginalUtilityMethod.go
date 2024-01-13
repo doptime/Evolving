@@ -1,7 +1,7 @@
 package main
 
 import (
-	"Evolving/chatGPT"
+	"MMUEvo/apiChatGPT"
 	"fmt"
 	"strings"
 
@@ -12,12 +12,12 @@ var keyProductLog = data.New[string, string]("ProdLog")
 
 func MMUToTasks(projectName, Description string) {
 	var (
-		asw *chatGPT.OutChatGPT
+		asw *apiChatGPT.OutChatGPT
 		err error
 		jss []string
 
-		JsonCompleted = chatGPT.JsonCompleted(1)
-		gpt4Chat      = chatGPT.ApiChatGptXY(chatGPT.Models["gpt-4-plugins"], 1, JsonCompleted)
+		JsonCompleted = apiChatGPT.JsonCompleted(1)
+		gpt4Chat      = apiChatGPT.ApiChatGptXY(apiChatGPT.Models["gpt-4-plugins"], 1, JsonCompleted)
 	)
 	ProjectLogger := keyProductLog.Concat(projectName)
 	BusinessState, _ := KeyMMUEvoBusinessState(projectName).HGet("BusinessStateDescription")
@@ -25,55 +25,50 @@ func MMUToTasks(projectName, Description string) {
 	prompt := fmt.Sprintf(`you are agent to evolute a system by method of maximization of marginal utility，你的任务是通过最大化效用的原则来演进一个系统。
 待演进的产品名称：%s
 待演进的产品描述：%s
-这是上一次迭代得到的 BusinessStateDescription :
-{
-	"BusinessStateDescription": "%s"
-}
 
 重要提示：以下所有的描述(Describe)必须具有因果模型和图模型的等价性。所有的描述包括必要的因果模型，并且可转化为等价的图模型
 
-	角色一：产品经理
-	任务：设计、开发或改进产品。步骤1.通过执行linux 命令或是提出相关问题，建立关于产品当前状态的足够必要的认知. 2.根据需求分解业务规格，并评估作为改进方案的业务规格的边际效用。提出并保留具有最高边际效用的一条业务规格
-	操作：
-	1. 执行Linux命令查看文件，例如：cat filexxx, ls -l, ...  执行linux cmd格式是:
+你需要在接下来的4个步骤中完成这个任务：
+
+
+步骤1.了解当前的业务状态。
+	- 这是上一次迭代得到的 BusinessStateDescription :
+$_json
+{
+	"BusinessStateDescription": "%s"
+}$_
+
+	- 你可以通过执行linux 命令，建立关于产品当前状态的足够必要的认知.
+	执行Linux命令查看文件，例如：cat filexxx, ls -l, ...  执行linux cmd格式是:
 $_json
 {
 	"cmd": "xxx"
 }$_。
-	2. 提出项目相关问题，格式为：
+ 	-你可以进一步提出项目相关问题，来补充关于系统的信息。格式为：
 $_json
 {"myQuestion": "xxx"}
 $_
-	3. 完成必要的对业务系统的理解后，更新对业务状态的描述，格式为：
+	- 完成必要的对业务系统的理解后，生成内容更新后业务状态的描述。格式为：
 $_json
 {	"BusinessStateDescription": "xxx"
 }$_
-	4. 生成具有最高边际效用的业务规格列表。你需要用迭代的方式做到这一点。首先需要，你提出改进一个目标的具有最高边际效用的业务规格，然后提出潜在的更具有边际效用的业务规格，再重复一次这个过程直到确定最终的一条业务规格。格式为：
+
+
+步骤2：你现在的角色是设计、开发或改进产品的产品经理。你需要根据需求分解业务规格，并评估作为改进方案的业务规格的边际效用。提出并生成具有最高边际效用的一条业务规格。你需要用迭代的方式做到这一点。
+	- 你提出一个用来改进目标的具有最高边际效用的业务规格
+	- 然后讨论改进这个业务规格的边际效用的潜在办法，
+	- 并生成最终的业务规格。格式为：
 $_json
 {
-"BusinessSpecificationItemOfMaxMarginalUtilityVersion1": { "name":  "xxx", "description": "xxx", },
-"改进的，更简单的方法或成本下的更高效用的业务规格需求改进方向是": "xxx",
-"BusinessSpecificationItemOfMaxMarginalUtilityVersion2": { "name":  "xxx", "description": "xxx", },
-"进一步改进的，更简单的方法或成本下的更高效用的业务规格需求改进方向是": "xxx",
-"there-is-a-even-maximizer-of-marginal-utility-than-version2-which-could-be": "xxx",
-"reason-version1-not-maximized-of-marginal-utility": "如果事实上存在比他更大的效用，那应该是xxx",
-}
-$_
-	角色二：架构师
-	任务：根据产品经理生成的业务规格要求，拆分为技术要求。you need to build the tech requirement in a evolutionary way, by generate the tech requrement items, and point out the possible improvement, and then generate the next version of tech requirement items. so on to get the final version of tech requirement items. the format of tech requirement items is:
+"BusinessSpecificationNameForMaxMarginalUtilityItem":  "xxx", "description": "xxx", 
+}$_
+
+
+步骤3：你现在的角色是架构师。根据刚刚产品经理生成的业务规格，你需要把它拆分为技术要求。
+这是技术要求定案格式:
 $_json
 {
-	"TechRequirementVersion1": [
-		{ "name": "xxx", "description": "xxx" },
-		...
-	],
-	"这个技术要求应当被改进，简化的地方在于": "xxx",
-	"TechRequirementVersion2": [
-		{ "name": "xxx", "description": "xxx" },
-		...
-	],
-	"这个技术要求应当被进一步改进，简化的地方在于": "xxx",
-	"FinalTechRequirement": [
+	"TechRequirements": [
 		{ "name": "xxx", "description": "xxx" },
 		...
 	],
@@ -107,7 +102,7 @@ $_
 		ProjectLogger.LPush(prompt)
 		if true {
 
-			asw = &chatGPT.OutChatGPT{Answer: `$_json
+			asw = &apiChatGPT.OutChatGPT{Answer: `$_json
 {
 	"BusinessStateDescription":"MMUEvo 当前配置为集成基于 GPT 的模型来生成和处理文本输入。它处理产品管理、架构和技术领导角色的迭代开发流程。该系统的设计是基于边际效用最大化原则的发展。当前的重点是细化业务规范，将其转化为技术需求，然后转化为可操作的开发任务。该系统已准备好对其迭代过程进行进一步优化，并正在等待新的规范以提高其功效和效率。"
 }
@@ -138,10 +133,10 @@ $_`}
 					return
 				}
 				break
-			} else if strings.Contains(js, "SpecificationName") {
+			} else if strings.Contains(js, "BusinessSpecificationNameForMaxMarginalUtilityItem") {
 				Step1ProcessSpecification(projectName, js)
-			} else if strings.Contains(js, "FinalTechRequirement") {
-				SaveFinalTechRequirement(projectName, js)
+			} else if strings.Contains(js, "TechRequirements") {
+				SaveTechRequirement(projectName, js)
 			} else if strings.Contains(js, "FinalDevelopmentTasks") {
 				SaveFinalDevelopmentTasks(projectName, js)
 				break

@@ -1,4 +1,4 @@
-module Evolving
+module MMUEvo
 
 go 1.21.5
 
@@ -10,7 +10,7 @@ require (
 	github.com/rs/zerolog v1.31.0
 	github.com/samber/lo v1.39.0
 	github.com/tidwall/gjson v1.17.0
-	github.com/yangkequn/saavuu v0.0.0-20240110134943-4215f38255a8
+	github.com/yangkequn/saavuu v0.0.0-20240112031305-424f65ff8f7f
 )
 
 require (
