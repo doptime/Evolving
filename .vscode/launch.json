@@ -15,6 +15,7 @@
                 "Http": "{\"CORES\":\"*\",\"Port\":8082,\"Path\":\"/\",\"Enable\":true,\"MaxBufferSize\":10485760}",
                 "LogLevel": "1",
                 "ENV": "dev",
+                "UpdateRefreshtoken": "true",
             },
         }
     ]

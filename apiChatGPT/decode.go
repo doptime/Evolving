@@ -7,7 +7,7 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-func DecodeFromResponseData(Messege string, ConversationID, MsgID, ModelSlug *string) (Answer string, err error) {
+func (ss *ChatGPTSession) DecodeFromResponseData(Messege string) (Answer string, err error) {
 	var (
 		cid_exist, msgID_exist, model_slug_exist bool
 		js                                       = gjson.Parse(Messege)
@@ -19,17 +19,17 @@ func DecodeFromResponseData(Messege string, ConversationID, MsgID, ModelSlug *st
 	}
 	cid, msgID, model_slug := js.Get("conversation_id"), messege.Get("id"), messege.Get("metadata").Get("model_slug")
 	if cid_exist = cid.Exists(); cid_exist {
-		*ConversationID = cid.String()
+		ss.ConversationID = cid.String()
 	} else {
 		return "", errors.New("gpt chat rsb missing conversation_id")
 	}
 	if msgID_exist = msgID.Exists(); msgID_exist {
-		*MsgID = msgID.String()
+		ss.MsgID = msgID.String()
 	} else {
 		return "", errors.New("gpt chat rsb missing message_id")
 	}
 	if model_slug_exist = model_slug.Exists(); model_slug_exist {
-		*ModelSlug = model_slug.String()
+		ss.ModelSlug = model_slug.String()
 	} else {
 		return "", errors.New("gpt chat rsb missing model_slug")
 	}

@@ -1,20 +1,23 @@
 package main
 
 import (
+	"MMUEvo/apiChatGPT"
 	"encoding/json"
-	"fmt"
+
+	"github.com/yangkequn/saavuu/data"
 )
 
-func askQuestion(js string) (prompt string, err error) {
+type MyQuestion struct {
+	MyQuestion string `json:"Questions-that-require-further-clarification"`
+}
+
+func AskHumanHelpInNextIter(code *apiChatGPT.GPTResponseCode, ProjectLogger *data.Ctx[string, []string]) (ok bool) {
 	var (
 		myQuestion *MyQuestion
 	)
-	if err = json.Unmarshal([]byte(js), &myQuestion); err != nil {
-		return "", err
+	if code.Type != "json" || json.Unmarshal([]byte(code.Text), &myQuestion) != nil || len(myQuestion.MyQuestion) == 0 {
+		return false
 	}
-	//print the question to the console, and wait for the answer
-	fmt.Println(" the product manager has a question: " + myQuestion.MyQuestion)
-	//read the answer from the console
-	fmt.Scanln(&prompt)
-	return prompt, nil
+	ProjectLogger.LPush([]string{myQuestion.MyQuestion})
+	return true
 }

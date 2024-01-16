@@ -161,7 +161,7 @@ func init() {
 	}
 }
 
-func QuotaCheckOK(Model string) (AccessToken string) {
+func TakeOneValidAccessToken(Model string) (AccessToken string) {
 	var token *AuthToken
 	var now = time.Now().Unix()
 	for i := 0; i < len(AuthTokenSlice); i++ {

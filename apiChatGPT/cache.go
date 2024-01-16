@@ -14,7 +14,7 @@ func GptCacheGet(model string, Prompt string) (LastMessage string, err error) {
 	} else if len(Prompt) == 0 {
 		return "", errors.New("GptCacheSet: Prompt is empty")
 	}
-	var keyGptCache = data.New[string, string](model).WithRedis("gptcache")
+	var keyGptCache = data.New[string, string](model)
 	return keyGptCache.Get(Prompt)
 }
 func GptCacheSet(model string, Prompt string, LastMessage string) (err error) {
@@ -26,7 +26,7 @@ func GptCacheSet(model string, Prompt string, LastMessage string) (err error) {
 		return errors.New("GptCacheSet: LastMessage is empty")
 	}
 
-	var keyGptCache = data.New[string, string](model).WithRedis("gptcache")
+	var keyGptCache = data.New[string, string](model)
 	return keyGptCache.Set(Prompt, LastMessage, 0)
 }
 func GptCacheRemove(model string, Prompt string) (err error) {
@@ -35,23 +35,23 @@ func GptCacheRemove(model string, Prompt string) (err error) {
 	} else if len(Prompt) == 0 {
 		return errors.New("GptCacheSet: Prompt is empty")
 	}
-	var keyGptCache = data.New[string, string](model).WithRedis("gptcache")
+	var keyGptCache = data.New[string, string](model)
 	return keyGptCache.Del(Prompt)
 }
-func LoadCache(req *InChatGPT, Prompt string, ConversationID, MsgID, ModelSlug *string) (Answer *OutChatGPT, err error) {
+func (ss *ChatGPTSession) LoadCache(Prompt string) (Answer *OutChatGPT, err error) {
 	var (
 		LastMessage string
 	)
-	if req.Model == "" {
+	if ss.Model == "" {
 		return nil, errors.New("LoadCache:Model is empty")
 	}
-	LastMessage, err = GptCacheGet(req.Model, Prompt)
+	LastMessage, err = GptCacheGet(ss.Model, Prompt)
 	if err != nil || len(LastMessage) < 20 {
 		return nil, fmt.Errorf("LoadCache: noCache")
 	}
 	Answer = &OutChatGPT{UseCache: true}
 	if strings.Contains(LastMessage, "conversation_id") {
-		Answer.Answer, err = DecodeFromResponseData(LastMessage, ConversationID, MsgID, ModelSlug)
+		Answer.Answer, err = ss.DecodeFromResponseData(LastMessage)
 	} else {
 		Answer.Answer = LastMessage
 	}
